@@ -1,0 +1,66 @@
+<template>
+  <div class="weather-card shadow-sm">
+    <img :src="imageUrl" class="weather-card__image" :alt="ciudad.name">
+    <div class="weather-card__body">
+      <h5 class="weather-card__title">{{ ciudad.name }}</h5>
+      <p class="weather-card__summary">
+        🌡️ <strong>{{ ciudad.temp }}°C</strong> - {{ ciudad.estado }}
+      </p>
+       <router-link 
+        :to="{name: 'cityDetail', params: {name: normalizarNombre(ciudad.name)}}"
+        class="btn btn-outline-primary btn-sm weather-card__btn"
+      >
+        Detalle de localidad
+      </router-link>
+    </div>
+  </div>
+</template>
+
+<script setup>
+import { computed } from "vue";
+import { cityImages } from "../services/cityImages";
+import defaultImg from "../assets/img/default-weather.png";
+
+const props = defineProps({
+  ciudad: Object
+});
+
+const normalizarNombre = (nombre) => {
+  return nombre 
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/\s+/g, "-");
+};
+
+const imageUrl = computed(() => {
+  const key= normalizarNombre(props.ciudad.name);
+  return cityImages[key] || defaultImg;
+});
+</script>
+
+<style scoped>
+.weather-card {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+}
+.weather-card__image {
+  width: 100%;
+  height: 240px;
+  object-fit: cover;
+}
+.weather-card__body {
+  padding: 16px;
+  text-align: center;
+}
+.weather-card__title {
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+.weather-card__summary {
+  margin-bottom: 8px;
+}
+
+</style>

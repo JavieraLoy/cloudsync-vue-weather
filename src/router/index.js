@@ -21,9 +21,9 @@ const routes = [
         component: ContactView 
     },
     {
-        path: '/city/:name',
-        name: 'city-detail',
-        component: CityDetailView,
+        path: '/ciudad/:name',
+        name: 'cityDetail',
+        component:CityDetailView,
         props: true
     }
 ];

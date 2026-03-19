@@ -80,7 +80,6 @@ const buscarCiudad = async () => {
   color: #fff;
 }
 .hero--weather {
-  
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -103,7 +102,7 @@ const buscarCiudad = async () => {
 }
 .weather-search {
   position: relative;
-  max-width: 400px;
+  max-width: 500px;
 }
 .weather-search__result {
   position: absolute;

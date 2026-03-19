@@ -42,15 +42,14 @@ import logo from '../assets/img/logo-cloudsync.png';
   border: none;
 }
 .main-nav__logo {
-  max-height: 80px;
+  max-height: 50px;
   width: auto;
 }
 .main-nav__list{
-  padding-left: 35px;
+  padding-left: 25px;
 }
 .main-nav__link {
   color: #fff;
   margin-right: 1rem;
-  font-size: 25px;
 }
 </style>
