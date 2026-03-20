@@ -20,7 +20,7 @@
                   <img :src="resultado.iconUrl" style="width:80px;" />
                   <div>
                     <strong>{{ resultado.name }}</strong><br>
-                    {{ resultado.temp }}°C - {{ resultado.estado }}<br>
+                    {{ convertirTemp(resultado.temp) }}°{{ unidad }} - {{ resultado.estado }}<br>
                     💧 {{ resultado.humedad }}%<br>
                     🌬️ {{ resultado.viento }} km/h
                   </div>
@@ -39,7 +39,10 @@
 import { ref } from "vue";
 import heroImg from '../assets/img/weather-hero.jpg';
 import { obtenerClimaActual } from "../services/apiWeatherService";
+import {useUnidad} from '../services/useUnidad';
 
+const {unidad, convertirTemp} = useUnidad();
+const emit= defineEmits(["agregar-ciudad"]);
 const ciudad = ref("");
 const resultado = ref(null);
 const status = ref("");
@@ -56,7 +59,7 @@ const buscarCiudad = async () => {
 
     const data = await obtenerClimaActual(ciudad.value);
 
-    resultado.value = {
+    const ciudadProcesada = {
       name: data.name,
       temp: Math.round(data.main.temp),
       humedad: data.main.humidity,
@@ -64,8 +67,11 @@ const buscarCiudad = async () => {
       estado: data.weather[0].description,
       iconUrl: `https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`
     };
-
+    resultado.value= ciudadProcesada;
+    emit("agregar-ciudad", ciudadProcesada);
+    console.log("emit ejecutado", ciudadProcesada);
     status.value = "";
+
   } catch (error) {
     status.value = "❌ Ciudad no encontrada";
   }

@@ -7,22 +7,23 @@ import { analizarPronostico} from '../services/statsCalculator.js';
 import { generarAlertas } from '../services/alertsService.js';
 import { cityImages} from '../services/cityImages.js';
 import defaultImg from '../assets/img/default-weather.png';
+import {useUnidad} from '../services/useUnidad.js';
 
 const route= useRoute();
-
+const {unidad, convertirTemp}= useUnidad();
 const ciudad= ref(null);
 const pronostico= ref([]);
 const stats= ref(null);
 const alertas= ref([]);
 const status= ref("");
 
-const normalizarNombre = (nombre) => {
-  return nombre 
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .toLowerCase()
-    .replace(/\s+/g, "-");
-};
+const normalizarNombre= (nombre)=>{
+  return nombre
+  .normalize("NFD")
+  .replace(/[\u0300-\u036f]/g, "")
+  .toLowerCase()
+  .replace(/\s+/g,"-");
+}
 const obtenerImagen = (nombre) => {
   const key= normalizarNombre(nombre);
   return cityImages[key] || defaultImg;
@@ -59,7 +60,7 @@ onMounted(cargarDatos);
 </script>
 
 <template>
-  <section class="city-detail container py-5">
+  <section class="city-detail__container container py-5">
     <div v-if="status" class="status-container">
       {{ status }}
     </div>
@@ -68,15 +69,15 @@ onMounted(cargarDatos);
         <img :src="obtenerImagen(ciudad.name)" class="city-detail__image" />
         <div class="city-detail__overlay">
           <h2>{{ ciudad.name }}</h2>
-          <p>{{ ciudad.temp }}°C - {{ ciudad.estado }}</p>
+          <p>{{ convertirTemp(ciudad.temp) }}°{{ unidad }} - {{ ciudad.estado }}</p>
         </div>
       </div>
       <div class="row text-center mb-4">
         <div class="col">Humedad: 💧 {{ ciudad.humedad }}%</div>
         <div class="col">Viento: 🌬️ {{ ciudad.viento }} km/h</div>
-        <div class="col">T° Min: 📉 {{ stats?.tempMin }}°C</div>
-        <div class="col">T° Max: 📈 {{ stats?.tempMax }}°C</div>
-        <div class="col">T° Promedio: 📊 {{ stats?.promedio }}°C</div>
+        <div class="col">T° Min: 📉 {{ convertirTemp(stats?.tempMin)}}°{{ unidad }}</div>
+        <div class="col">T° Max: 📈 {{ convertirTemp(stats?.tempMax) }}°{{ unidad }}</div>
+        <div class="col">T° Promedio: 📊 {{convertirTemp(stats?.promedio )}}°{{ unidad }}</div>
       </div>
       <div class="text-center mb-4 text-primary">
         {{ stats?.resumen }}
@@ -96,9 +97,14 @@ onMounted(cargarDatos);
             class="list-group-item"
           >
             {{ dia.dia }}: {{ dia.estado }}
-            (Max: {{ dia.max }}°C / Min: {{ dia.min }}°C)
+            (Max: {{convertirTemp(dia.max)}}°{{unidad}}/ Min: {{ convertirTemp(dia.min) }}°{{ unidad }})
           </li>
         </ul>
+      </div>
+      <div class="d-flex justify-content-end mt-4">
+        <router-link to="/" class="btn btn-outline-primary city-detail__back">
+          ⬅️ Volver al inicio
+        </router-link>
       </div>
     </div>
   </section>
@@ -106,25 +112,30 @@ onMounted(cargarDatos);
 
 <style scoped>
 .status-container{
-  min-height: 60vh;
+  min-height: 80vh;
   display: flex;
   align-items: center;
   justify-content: center;
   text-align: center;
   color: #6c757d;
-  font-size: 1.2rem;
+  font-size: 1rem;
+}
+.city-detail__container{
+ max-width: 900px;
+ margin:0 auto;
 }
 .city-detail__hero {
-  padding-top: 90px;
+  padding-top: 60px;
   position: relative;
-  border-radius: 12px;
+  border-radius: 16px;
   overflow: hidden;
 }
 .city-detail__image {
   width: 100%;
-  height: 400px;
-  border-radius: 12px;
+  max-height: 400px;
+  border-radius: 16px;
   object-fit: cover;
+  object-position: center;
 }
 .city-detail__overlay {
   position: absolute;
@@ -134,5 +145,14 @@ onMounted(cargarDatos);
   padding: 16px;
   background: linear-gradient(transparent, rgba(0,0,0,0.7));
   color: white;
+}
+.city-detail__back{
+  border-radius: 20px;
+  padding: 8px 16px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+.city-detail__back:hover{
+  transform: translateX(-4px);
 }
 </style>

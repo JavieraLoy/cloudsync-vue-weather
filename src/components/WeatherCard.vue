@@ -4,10 +4,10 @@
     <div class="weather-card__body">
       <h5 class="weather-card__title">{{ ciudad.name }}</h5>
       <p class="weather-card__summary">
-        🌡️ <strong>{{ ciudad.temp }}°C</strong> - {{ ciudad.estado }}
+        🌡️ <strong>{{convertirTemp(ciudad.temp)}}°{{ unidad }}</strong> - {{ ciudad.estado }}
       </p>
        <router-link 
-        :to="{name: 'cityDetail', params: {name: normalizarNombre(ciudad.name)}}"
+        :to="{name: 'cityDetail', params: {name: desnormalizarNombre(ciudad.name)}}"
         class="btn btn-outline-primary btn-sm weather-card__btn"
       >
         Detalle de localidad
@@ -20,18 +20,26 @@
 import { computed } from "vue";
 import { cityImages } from "../services/cityImages";
 import defaultImg from "../assets/img/default-weather.png";
+import {useUnidad} from '../services/useUnidad';
 
 const props = defineProps({
   ciudad: Object
 });
+const {unidad, convertirTemp}= useUnidad();
 
-const normalizarNombre = (nombre) => {
+const desnormalizarNombre = (nombre) => {
   return nombre 
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .toLowerCase()
-    .replace(/\s+/g, "-");
+    .replace(/-/g, "")
+    .replace(/\b\w/g, l=> l.toUpperCase());
 };
+
+const normalizarNombre= (nombre)=>{
+  return nombre
+  .normalize("NFD")
+  .replace(/[\u0300-\u036f]/g, "")
+  .toLowerCase()
+  .replace(/\s+/g,"-");
+}
 
 const imageUrl = computed(() => {
   const key= normalizarNombre(props.ciudad.name);

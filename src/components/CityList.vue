@@ -11,30 +11,38 @@
       </div>
       <div class="row g-4 locations__grid">
         <div 
-          v-for="ciudad in ciudades" 
-          :key="ciudad.name"
+          v-for="(ciudad, i) in ciudadesFinales" 
+          :key="i"
           class="col-lg-4 col-md-6 mb-3"
         >
           <WeatherCard :ciudad="ciudad" />
         </div>
       </div>
-
     </div>
   </section>
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed } from "vue";
 import WeatherCard from "../components/WeatherCard.vue";
 import { obtenerClimaActual } from "../services/apiWeatherService";
 
+const props= defineProps({
+  ciudades: {
+    type: Array,
+    default: ()=> []
+  }
+});
+
 const ciudadesIniciales = [
   "Santiago",
+  "Antofagasta",
+  "Calama",
   "Valparaiso",
   "Concepcion"
 ];
 
-const ciudades = ref([]);
+const ciudadesBase = ref([]);
 
 const cargarCiudades = async () => {
   const promesas = ciudadesIniciales.map(ciudad =>
@@ -43,7 +51,7 @@ const cargarCiudades = async () => {
 
   const resultados = await Promise.all(promesas);
 
-  ciudades.value = resultados.map(data => ({
+  ciudadesBase.value = resultados.map(data => ({
     name: data.name,
     temp: Math.round(data.main.temp),
     humedad: data.main.humidity,
@@ -52,8 +60,22 @@ const cargarCiudades = async () => {
     iconUrl: `https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`
   }));
 };
-
 onMounted(cargarCiudades);
+
+const ciudadesFinales= computed(()=>{
+  const todas= [...ciudadesBase.value, ...props.ciudades];
+  const unicas= [];
+  const nombres= new Set();
+  for(const c of todas){
+    const nombre= c.name.toLowerCase();
+    if(!nombres.has(nombre)){
+      nombres.add(nombre);
+      unicas.push(c);
+    }
+  }
+  return unicas;
+});
+
 </script>
 
 <style scoped>

@@ -25,6 +25,9 @@
                     </router-link>
                 </li>
             </ul>
+            <button @click="toggleUnidad" class="btn btn-sm btn-light ms-2">
+              Cambiar unidad: °{{ unidad }}
+            </button>
         </div>
     </div>
   </nav>
@@ -32,21 +35,25 @@
 
 <script setup>
 import logo from '../assets/img/logo-cloudsync.png';
+import { useUnidad } from '../services/useUnidad';
+
+const {unidad, toggleUnidad}= useUnidad();
 </script>
 
 <style scoped>
 .main-nav {
   background-color: rgba(47, 93, 140, 0.5);
+  font-size: 16px;
 }
 .main-nav__toggler {
   border: none;
 }
 .main-nav__logo {
-  max-height: 50px;
+  max-height: 40px;
   width: auto;
 }
 .main-nav__list{
-  padding-left: 25px;
+  padding-left: 20px;
 }
 .main-nav__link {
   color: #fff;
