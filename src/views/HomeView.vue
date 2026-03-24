@@ -7,6 +7,10 @@
 import {ref} from 'vue';
 import HeroHeader from '../components/HeroHeader.vue';
 import CityList from '../components/CityList.vue';
+import {useStore} from 'vuex';
+
+const store= useStore();
+console.log(store.getters.isAuth);
 
 const ciudades= ref([]);
 
