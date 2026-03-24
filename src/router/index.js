@@ -3,6 +3,7 @@ import HomeView from '../views/HomeView.vue';
 import AboutView from '../views/AboutView.vue';
 import ContactView from '../views/ContactView.vue';
 import CityDetailView from '../views/CityDetailView.vue';
+import LoginView from '../views/LoginView.vue';
 
 const routes = [
     {
@@ -25,6 +26,11 @@ const routes = [
         name: 'cityDetail',
         component:CityDetailView,
         props: true
+    },
+    {
+        path: '/login',
+        name: 'login',
+        component: LoginView
     }
 ];
 
