@@ -25,9 +25,20 @@
                     </router-link>
                 </li>
             </ul>
-            <button @click="toggleUnidad" class="btn btn-sm btn-light ms-2">
-              Cambiar unidad: °{{ unidad }}
-            </button>
+            <div class="d-flex align-items-center gap-2 main-nav__actions">
+              <button @click="toggleUnidad" class="btn btn-sm btn-light main-nav__btn">
+                °{{ unidad }}
+              </button>
+              <div v-if="isAuth">
+                <span class="main-nav__user">Hola 👋, {{ user.name }}</span>
+                <button @click="logout" class="btn btn-sm btn-outline-light main-nav__btn">
+                  Salir
+                </button>
+              </div>
+              <router-link v-else to="/login" class="btn btn-sm btn-outline-light main-nav__btn">
+                Login
+              </router-link>
+            </div>
         </div>
     </div>
   </nav>
@@ -36,14 +47,29 @@
 <script setup>
 import logo from '../assets/img/logo-cloudsync.png';
 import { useUnidad } from '../services/useUnidad';
+import {useStore} from 'vuex';
+import {computed} from 'vue';
+import {useRouter} from 'vue-router';
 
 const {unidad, toggleUnidad}= useUnidad();
+const store= useStore();
+const router=useRouter();
+
+const isAuth= computed(()=> store.getters.isAuth);
+const user= computed(()=> store.state.user);
+const logout=()=>{
+  store.dispatch("logout");
+  router.push("/login");
+};
+console.log("USER:", store.state.user);
 </script>
 
 <style scoped>
 .main-nav {
   background-color: rgba(47, 93, 140, 0.5);
   font-size: 16px;
+  backdrop-filter: blur(6px);
+  padding: 8px 0;
 }
 .main-nav__toggler {
   border: none;
@@ -58,5 +84,23 @@ const {unidad, toggleUnidad}= useUnidad();
 .main-nav__link {
   color: #fff;
   margin-right: 1rem;
+}
+.main-nav__actions{
+  padding-right: 10px;
+}
+.main-nav__btn{
+  border-radius: 20px;
+  font-size: 0.85rem;
+  padding: 4px 10px;
+}
+.main-nav__btn:hover{
+  transform: scale(1.05);
+  transition:0.2s;
+}
+.main-nav__user{
+  color:#fff;
+  font-size: 0.9rem;
+  margin: 0 5px;
+  white-space: nowrap;
 }
 </style>

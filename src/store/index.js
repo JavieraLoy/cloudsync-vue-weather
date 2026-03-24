@@ -7,13 +7,17 @@ export default createStore({
   },
   getters: {
     getUser: (state) => state.user,
-    isAuth: (state) => state.isAuthenticated
+    isAuth: (state) => !!state.user
   },
 
   mutations: {
     SET_USER(state, user) {
-      state.user = user;
-      state.isAuthenticated = true;
+      state.user = {
+        name: user.name,
+        email: user.email
+      };
+      state.isAuthenticated=true;
+      
     },
     LOGOUT(state) {
       state.user = null;
@@ -27,7 +31,7 @@ export default createStore({
         {
           email: "test@mail.com",
           password: "123456",
-          nombre: "Javiera"
+          name: "Javiera"
         }
       ];
 

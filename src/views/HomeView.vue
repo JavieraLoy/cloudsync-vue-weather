@@ -7,14 +7,6 @@
 import {ref} from 'vue';
 import HeroHeader from '../components/HeroHeader.vue';
 import CityList from '../components/CityList.vue';
-import {useStore} from 'vuex';
-
-const store= useStore();
-store.commit("SET_USER", {
-  email: "test@mail.com",
-  password: "123456",
-});
-console.log(store.getters.isAuth);
 
 
 const ciudades= ref([]);
