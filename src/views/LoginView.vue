@@ -6,6 +6,9 @@
         <p class="text-center text-muted mb-4">
           Accede para gestionar tus preferencias climáticas ☁️
         </p>
+        <div v-if="mensajeLogout" class="alert alert-success text-center">
+          {{ mensajeLogout }}
+        </div>
         <form @submit.prevent="handleLogin" novalidate>
           <div class="mb-3">
             <label class="form-label">Email</label>
@@ -46,7 +49,7 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
 
@@ -73,11 +76,23 @@ const handleLogin = async () => {
   });
 
   if (success) {
-    router.push("/"); 
+    await  router.push("/");
   } else {
     loginError.value = true;
   }
 };
+const mensajeLogout= ref('');
+onMounted(()=>{
+  const mensaje= localStorage.getItem('logoutMessage');
+  if(mensaje){
+    mensajeLogout.value= mensaje;
+    localStorage.removeItem('logoutMessage');
+    
+    setTimeout(()=>{
+      mensajeLogout.value= "";
+    }, 3000);
+  }
+});
 </script>
 
 <style scoped>

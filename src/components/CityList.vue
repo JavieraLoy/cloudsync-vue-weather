@@ -37,7 +37,7 @@ const props= defineProps({
 const ciudadesIniciales = [
   "Santiago",
   "Antofagasta",
-  "Calama",
+  "Vina del mar",
   "Valparaiso",
   "Concepcion"
 ];

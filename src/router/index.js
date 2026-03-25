@@ -4,6 +4,8 @@ import AboutView from '../views/AboutView.vue';
 import ContactView from '../views/ContactView.vue';
 import CityDetailView from '../views/CityDetailView.vue';
 import LoginView from '../views/LoginView.vue';
+import FavoritosView from '../views/FavoritosView.vue';
+import store from '../store/index';
 
 const routes = [
     {
@@ -31,12 +33,26 @@ const routes = [
         path: '/login',
         name: 'login',
         component: LoginView
+    },
+    {
+        path: '/favoritos',
+        name: 'favoritos',
+        component: FavoritosView,
+        meta: {requiresAuth: true}
     }
 ];
 
 const router= createRouter({
     history: createWebHistory(),
     routes,
+});
+
+router.beforeEach((to)=>{
+    const user= store.state.user;
+    if(to.meta.requiresAuth && !user){
+        return {name: 'login'};
+    }
+    return true;
 });
 
 export default router;

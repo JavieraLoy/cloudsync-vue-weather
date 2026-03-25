@@ -5,7 +5,7 @@ import calama from '../assets/img/calama.jpg';
 import laSerena from '../assets/img/laSerena.jpg';
 import vina from '../assets/img/vinadelmar.jpg';
 import valparaiso from '../assets/img/valparaiso.jpg';
-import concepcion from '../assets/img/concepcion.jpg';
+import concepcion from '../assets/img/concepcion.png';
 import valdivia from '../assets/img/valdivia.jpg';
 import puntaArenas from '../assets/img/puntaarenas.jpg';
 

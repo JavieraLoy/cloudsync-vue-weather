@@ -10,34 +10,37 @@
             </router-link>
             <ul class="navbar-nav me-auto mb-2 mb-lg-0 main-nav__list">
                 <li class="nav-item main-nav__item">
-                    <router-link class="nav-link main-nav__link" to="/" active-class="active">
-                        Home
-                    </router-link>
+                  <router-link class="nav-link main-nav__link" to="/" active-class="active">
+                    Home
+                  </router-link>
                 </li>
                 <li class="nav-item main-nav__item">
-                    <router-link class="nav-link main-nav__link" to="/about" active-class="active">
-                        Sobre Nosotros
-                    </router-link>
+                  <router-link class="nav-link main-nav__link" to="/about" active-class="active">
+                    Sobre Nosotros
+                  </router-link>
                 </li>
                 <li class="nav-item main-nav__item">
-                    <router-link class="nav-link main-nav__link" to="/contact" active-class="active">
-                        Contacto
-                    </router-link>
+                  <router-link class="nav-link main-nav__link" to="/contact" active-class="active">
+                    Contacto
+                  </router-link>
+                </li>
+                <li v-if="store.state.user" class="nav-item main-nav__item">
+                  <router-link class="nav-link main-nav__link" to="/favoritos">
+                    Favoritos ⭐
+                  </router-link>
                 </li>
             </ul>
-            <div class="d-flex align-items-center gap-2 main-nav__actions">
+            <div class="d-flex flex-column flex-lg-row align-items-start align-items-lg-center gap-2 mt-3 mt-lg-0 main-nav__actions">
               <button @click="toggleUnidad" class="btn btn-sm btn-light main-nav__btn">
                 °{{ unidad }}
               </button>
-              <div v-if="isAuth">
-                <span class="main-nav__user">Hola 👋, {{ user.name }}</span>
-                <button @click="logout" class="btn btn-sm btn-outline-light main-nav__btn">
-                  Salir
-                </button>
-              </div>
-              <router-link v-else to="/login" class="btn btn-sm btn-outline-light main-nav__btn">
+              <span v-if="user" class="main-nav__user">Hola 👋, {{ user.name }}</span>           
+              <router-link v-if="!user" to="/login" class="btn btn-sm btn-outline-light main-nav__btn">
                 Login
               </router-link>
+              <button v-else @click="logout" class="btn btn-sm btn-danger main-nav__btn">
+                Salir
+              </button>
             </div>
         </div>
     </div>
@@ -55,13 +58,12 @@ const {unidad, toggleUnidad}= useUnidad();
 const store= useStore();
 const router=useRouter();
 
-const isAuth= computed(()=> store.getters.isAuth);
 const user= computed(()=> store.state.user);
 const logout=()=>{
   store.dispatch("logout");
+  localStorage.setItem("logoutMessage","Sesión cerrada correctamente");
   router.push("/login");
 };
-console.log("USER:", store.state.user);
 </script>
 
 <style scoped>
@@ -79,7 +81,7 @@ console.log("USER:", store.state.user);
   width: auto;
 }
 .main-nav__list{
-  padding-left: 20px;
+  padding-left: 10px;
 }
 .main-nav__link {
   color: #fff;
