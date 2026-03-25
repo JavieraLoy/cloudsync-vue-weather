@@ -1,9 +1,8 @@
-🌦️ CloudSync – Weather App (Vue Version)
+🌦️ CloudSync – Weather App (Vue + Auth Version)
 
 CloudSync es una aplicación web desarrollada con Vue 3 que permite consultar el clima en distintas ciudades de Chile en tiempo real, utilizando la API pública de OpenWeather.
 
-La aplicación está diseñada como una SPA (Single Page Application), incorporando navegación dinámica con Vue Router, arquitectura modular basada en servicios y componentes reutilizables, y una interfaz moderna construida con Bootstrap 5.
-
+En esta versión, la aplicación evoluciona incorporando un sistema de autenticación con Vuex, rutas protegidas y personalización por usuario, manteniendo su arquitectura modular y una interfaz moderna basada en Bootstrap 5.
 
 🚀 Características principales
 
@@ -31,11 +30,21 @@ La aplicación está diseñada como una SPA (Single Page Application), incorpora
 ✉️ Formulario de contacto validado con Vue + Bootstrap
 🧭 Navegación SPA con Vue Router
 
+🔐Nuevas funcionalidades (Autenticación y usuario)
+
+🔑 Sistema de login con Vuex
+👤 Manejo de estado global de usuario
+🔒 Rutas protegidas con Vue Router (navigation guards)
+⭐ Sistema de ciudades favoritas por usuario
+💾 Persistencia con localStorage
+🚪 Cierre de sesión con feedback visual
+🎯 UI dinámica según estado de autenticación (login/logout/navbar)
+
 
 🧩 Vistas principales:
 
 🏠 HomeView
-Muestra ciudades principales, buscador y listado dinámico de ciudades agregadas.
+Muestra ciudades principales, buscador y listado dinámico de ciudades.
 
 📍 CityDetailView
 Muestra el detalle completo del clima y pronóstico de una ciudad.
@@ -46,19 +55,53 @@ Información sobre la aplicación y su propósito.
 ✉️ ContactView
 Formulario de suscripción con validaciones y feedback visual.
 
+🔐 LoginView
+Formulario de inicio de sesión con validación de credenciales.
+
+⭐ FavoritosView
+Muestra las ciudades guardadas por el usuario autenticado.
+
+
 🧭 Rutas (Vue Router):
 
 Ruta	           Vista	           Descripción
-/	               HomeView	           Página principal con listado. de ciudades
+/	               HomeView	           Página principal con listado de ciudades.
 /ciudad/:name	   CityDetailView	   Detalle del clima por ciudad.
 /about	           AboutView	       Información del proyecto.
 /contact	       ContactView	       Formulario de contacto.
+/login             LoginView           Inicio de sesión.
+/favoritos         FavoritosView       Vista protegida con ciudades favoritas.
+
+🔒 La ruta /favoritos requiere autenticación mediante guards de Vue Router.
+
+🧠 Gestión de estado (Vuex)
+
+Se implementa Vuex para manejar:
+
+• Usuario autenticado
+• Estado de sesión (isAuthenticated)
+• Lista de favoritos
+
+Mutations principales:
+• SET_USER
+• LOGOUT
+• AGREGAR_FAVORITO
+• ELIMINAR_FAVORITO
+
+Actions:
+• login
+• logout
+• agregarFavorito
+• eliminarFavorito
+
+La información se persiste en localStorage para mantener la sesión activa.
 
 🛠️ Tecnologías utilizadas:
 
 - Vue 3 (Composition API) → Base del desarrollo.
 - Vite → Entorno de desarrollo rápido.
 - Vue Router → Navegación SPA.
+- Vuex → Gestión de estado.
 - Bootstrap 5 → Diseño responsive y componentes UI.
 - JavaScript ES6 → Lógica de la aplicación.
 - Fetch API → Consumo de API.
@@ -89,6 +132,7 @@ services/ → Lógica de negocio:
 - Adaptadores
 - Cálculos
 - Alertas
+store/ → Manejo global del estado(Vuex).
 router/ → Configuración de rutas.
 
 📁 Estructura del proyecto
@@ -112,6 +156,8 @@ cloudsync-vue/
 │   │   ├── HomeView.vue
 │   │   ├── CityDetailView.vue
 │   │   ├── AboutView.vue
+|   |   ├── LoginView.vue
+|   |   ├── FavoritosView.vue
 │   │   └── ContactView.vue
 │   │
 │   ├── services/
@@ -122,6 +168,9 @@ cloudsync-vue/
 │   │   ├── cityImages.js
 │   │   └── useUnidad.js
 │   │
+|   ├── store/
+│   │   └── index.js
+|   |
 │   ├── router/
 │   │   └── index.js
 │   │
@@ -143,20 +192,33 @@ git clone https://github.com/JavieraLoy/cloudsync-vue-weather.git
 
 cd cloudsync-vue
 
-3️⃣ Instalar dependencias:
+3️⃣ Cambiar a la rama actual:
+
+git checkout feature-auth-vuex
+
+4️⃣ Instalar dependencias:
 
 npm install
 
-4️⃣ Ejecutar el servidor de desarrollo:
+5️⃣ Ejecutar el servidor de desarrollo:
 
 npm run dev
 
-5️⃣ Abrir en navegador:
+6️⃣ Abrir en navegador:
 
 http://localhost:5173
 
 
+🔗 Repositorio
+
+Repositorio público:
+
+https://github.com/JavieraLoy/cloudsync-vue-weather
+
+Rama actual:
+feature-auth-vuex
+
 👩‍💻 Autor:
 
 Desarrollado por Javiera Loyola
-Proyecto enfocado en el aprendizaje de Vue 3, vue router,  consumo de APIs y desarrollo frontend moderno.
+Proyecto enfocado en el aprendizaje de Vue 3, Vuex, vue router,  consumo de APIs y desarrollo frontend moderno, incorporando autenticación, manejo de estado global y buenas prácticas de arquitectura.
