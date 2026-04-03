@@ -24,12 +24,15 @@
     </section>
 </template>
 <script setup>
-import {computed} from 'vue';
+import {computed, onMounted} from 'vue';
 import { useStore} from 'vuex';
 import WeatherCard from '../components/WeatherCard.vue';
 
 const store= useStore();
 const favoritos= computed(()=> store.getters.getFavoritos);
+onMounted(()=>{
+ console.log("FAVORITOS EN STATE:", store.state.favoritos);
+});
 </script>
 <style scoped>
 .favoritos{

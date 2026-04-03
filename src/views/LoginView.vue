@@ -43,6 +43,12 @@
             Ingresar
           </button>
         </form>
+        <p class="text-center mt-3">
+          ¿No tienes cuenta?
+          <router-link to="/registro">
+            Regístrate
+          </router-link>
+        </p>
       </div>
     </div>
   </section>
@@ -74,7 +80,7 @@ const handleLogin = async () => {
     email: email.value,
     password: password.value
   });
-
+   console.log("DESPUES DEL LOGIN:", store.state.favoritos);
   if (success) {
     await  router.push("/");
   } else {

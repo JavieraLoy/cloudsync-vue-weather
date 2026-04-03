@@ -4,7 +4,7 @@ export default createStore({
   state: {
     user: JSON.parse(localStorage.getItem("user")) || null,
     isAuthenticated: !!localStorage.getItem("user"),
-    favoritos: JSON.parse(localStorage.getItem("favoritos")) || []
+    favoritos: []
   },
   getters: {
     getUser: (state) => state.user,
@@ -28,29 +28,33 @@ export default createStore({
       const existe= state.favoritos.some(c=> c.name.toLowerCase() === ciudad.name.toLowerCase());
       if(!existe){
         state.favoritos.push(ciudad);
-        localStorage.setItem("favoritos", JSON.stringify(state.favoritos));
+        if(!state.user) return;
+        const key= `favoritos_${state.user.email}`;
+        localStorage.setItem(key, JSON.stringify(state.favoritos));
       }
     },
     ELIMINAR_FAVORITO(state, nombreCiudad){
       state.favoritos= state.favoritos.filter(c=> c.name !== nombreCiudad);
-      localStorage.setItem("favoritos", JSON.stringify(state.favoritos));
+      if(!state.user) return;
+      const key= `favoritos_${state.user.email}`;
+      localStorage.setItem(key, JSON.stringify(state.favoritos));
+    },
+    SET_FAVORITOS(state, favoritos){
+      state.favoritos= favoritos;
     }
   },
 
   actions: {
     login({ commit }, credentials) {
-      const usuarios = [
-        {
-          email: "test@mail.com",
-          password: "123456",
-          name: "Javiera"
-        }
-      ];
+      const usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
 
       const user = usuarios.find(u => u.email === credentials.email && u.password === credentials.password);
 
       if (user) {
         commit("SET_USER", user);
+        const key= `favoritos_${user.email}`;
+        const favoritos= JSON.parse(localStorage.getItem(key)) || [];
+        commit("SET_FAVORITOS", favoritos);
         return true;
       } else {
         return false;
@@ -65,6 +69,20 @@ export default createStore({
     },
     eliminarFavorito({commit}, nombreCiudad){
       commit("ELIMINAR_FAVORITO", nombreCiudad);
+    },
+    register(_, newUser) {
+      const usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
+      const existe = usuarios.find(u => u.email === newUser.email);
+      if (existe) return false;
+      usuarios.push(newUser);
+      localStorage.setItem("usuarios", JSON.stringify(usuarios));
+      return true;
+    },
+    cargarFavoritos({commit, state}){
+      if(!state.user || !state.user.email) return;
+      const key= `favoritos_${state.user.email}`;
+      const favoritos= JSON.parse(localStorage.getItem(key)) || [];
+      commit("SET_FAVORITOS", favoritos);
     }
   }
 

@@ -1,10 +1,12 @@
-🌦️ CloudSync – Weather App (Vue + Auth Version)
+# 🌦️ CloudSync – Weather App (Vue + Auth Version + User System Version)
 
 CloudSync es una aplicación web desarrollada con Vue 3 que permite consultar el clima en distintas ciudades de Chile en tiempo real, utilizando la API pública de OpenWeather.
 
-En esta versión, la aplicación evoluciona incorporando un sistema de autenticación con Vuex, rutas protegidas y personalización por usuario, manteniendo su arquitectura modular y una interfaz moderna basada en Bootstrap 5.
+En esta versión, la aplicación evoluciona incorporando un sistema completo de autenticación con Vuex, registro de usuarios, rutas protegidas y personalización por usuario, manteniendo su arquitectura modular y una interfaz moderna basada en Bootstrap 5.
 
-🚀 Características principales
+----------
+
+## 🚀 Características principales:
 
 🌍 Consulta del clima actual en ciudades de Chile
 🔍 Búsqueda dinámica de ciudades
@@ -30,18 +32,23 @@ En esta versión, la aplicación evoluciona incorporando un sistema de autentica
 ✉️ Formulario de contacto validado con Vue + Bootstrap
 🧭 Navegación SPA con Vue Router
 
-🔐Nuevas funcionalidades (Autenticación y usuario)
+----------
 
-🔑 Sistema de login con Vuex
-👤 Manejo de estado global de usuario
-🔒 Rutas protegidas con Vue Router (navigation guards)
-⭐ Sistema de ciudades favoritas por usuario
-💾 Persistencia con localStorage
-🚪 Cierre de sesión con feedback visual
-🎯 UI dinámica según estado de autenticación (login/logout/navbar)
+## 🔐Nuevas funcionalidades (Autenticación y usuario):
 
+🔑 Sistema de login dinámico con Vuex.
+📝 Registro de nuevos usuarios.
+👤 Manejo de estado global de usuario.
+🔒 Rutas protegidas con Vue Router (navigation guards).
+🚫 Rutas restringidas para usuarios autenticados(login/registro).
+⭐ Sistema de ciudades favoritas por usuario.
+💾 Persistencia de sesión y datos con localStorage.
+🚪 Cierre de sesión con feedback visual.
+🎯 Navbar dinámico según estado de autenticación.
 
-🧩 Vistas principales:
+----------
+
+## 🧩 Vistas principales:
 
 🏠 HomeView
 Muestra ciudades principales, buscador y listado dinámico de ciudades.
@@ -58,11 +65,15 @@ Formulario de suscripción con validaciones y feedback visual.
 🔐 LoginView
 Formulario de inicio de sesión con validación de credenciales.
 
+📝 RegisterView
+Formulario de Registro de nuevos usuarios.
+
 ⭐ FavoritosView
 Muestra las ciudades guardadas por el usuario autenticado.
 
+----------
 
-🧭 Rutas (Vue Router):
+## 🧭 Rutas (Vue Router):
 
 Ruta	           Vista	           Descripción
 /	               HomeView	           Página principal con listado de ciudades.
@@ -70,33 +81,42 @@ Ruta	           Vista	           Descripción
 /about	           AboutView	       Información del proyecto.
 /contact	       ContactView	       Formulario de contacto.
 /login             LoginView           Inicio de sesión.
+/registro          RegisterView        Registro de usuario.
 /favoritos         FavoritosView       Vista protegida con ciudades favoritas.
 
-🔒 La ruta /favoritos requiere autenticación mediante guards de Vue Router.
+🔒 La ruta /favoritos requiere autenticación.
+🚫 /login y /registro no están disponibles para usuarios autenticados.
 
-🧠 Gestión de estado (Vuex)
+----------
+
+## 🧠 Gestión de estado (Vuex):
 
 Se implementa Vuex para manejar:
 
 • Usuario autenticado
 • Estado de sesión (isAuthenticated)
-• Lista de favoritos
+• Lista de favoritos por usuario
 
 Mutations principales:
 • SET_USER
 • LOGOUT
 • AGREGAR_FAVORITO
 • ELIMINAR_FAVORITO
+• SET_FAVORITOS
 
 Actions:
 • login
 • logout
 • agregarFavorito
 • eliminarFavorito
+• register
+• cargarFavoritos
 
-La información se persiste en localStorage para mantener la sesión activa.
+📌 Los datos se almacenan en localStorage para persistencia.
 
-🛠️ Tecnologías utilizadas:
+----------
+
+## 🛠️ Tecnologías utilizadas:
 
 - Vue 3 (Composition API) → Base del desarrollo.
 - Vite → Entorno de desarrollo rápido.
@@ -108,34 +128,65 @@ La información se persiste en localStorage para mantener la sesión activa.
 - CSS personalizado + BEM → Estilos organizados.
 - OpenWeather API → Datos climáticos en tiempo real.
 
-🌐 API utilizada
+----------
+
+## 🌐 API utilizada:
 
 - OpenWeather API
 - Documentación: https://openweathermap.org/api
 
 Endpoints utilizados:
-/weather → Clima actual
-/forecast → Pronóstico de 5 días
+• /weather → Clima actual
+• /forecast → Pronóstico de 5 días
 
 Configuración:
-Units: metric
-Language: es
-Country: CL
+• Units: metric
+• Language: es
+• Country: CL
 
-🧠 Arquitectura del proyecto:
+----------
 
-La aplicación sigue una arquitectura modular separando responsabilidades:
-components/ → Componentes reutilizables (cards, navbar, footer).
-views/ → Vistas principales (páginas).
-services/ → Lógica de negocio:
+## 🔑 Configuración de API Key:
+
+Para que la aplicación funcione correctamente, es necesario contar con una API Key de OpenWeather.
+Por motivos de seguridad, la API Key no se incluye en este repositorio, por lo que cada usuario debe utilizar la suya.
+
+📌 Instrucciones:
+1️⃣ Registrarse en: 
+https://openweathermap.org/api
+
+2️⃣ Generar una API Key personal.
+
+3️⃣ Dirigirse al archivo:
+src/services/apiWeatherService.js
+
+4️⃣ Reemplazar la API Key en el código:
+const API_KEY = "TU_API_KEY_AQUI";
+
+🚫 Importante:
+• No compartir tu API Key públicamente.
+• Cada usuario debe usar su propia clave.
+Sin una API Key válida, la aplicación no podrá obtener datos del clima.
+
+----------
+
+## 🧠 Arquitectura del proyecto:
+
+Estructura modular:
+
+• components/ → Componentes reutilizables.
+• views/ → Vistas principales.
+• services/ → Lógica de negocio:
 - API
 - Adaptadores
 - Cálculos
 - Alertas
-store/ → Manejo global del estado(Vuex).
-router/ → Configuración de rutas.
+• store/ → Estado global (Vuex).
+• router/ → Configuración de rutas.
 
-📁 Estructura del proyecto
+----------
+
+## 📁 Estructura del proyecto:
 cloudsync-vue/
 │
 ├── public/
@@ -158,6 +209,7 @@ cloudsync-vue/
 │   │   ├── AboutView.vue
 |   |   ├── LoginView.vue
 |   |   ├── FavoritosView.vue
+|   |   ├── RegisterView.vue
 │   │   └── ContactView.vue
 │   │
 │   ├── services/
@@ -182,7 +234,9 @@ cloudsync-vue/
 ├── package.json
 └── README.md
 
-⚙️ Instalación y uso
+----------
+
+## ⚙️ Instalación y uso:
 
 1️⃣ Clonar el repositorio:
 
@@ -194,7 +248,7 @@ cd cloudsync-vue
 
 3️⃣ Cambiar a la rama actual:
 
-git checkout feature-auth-vuex
+git checkout feature-registro
 
 4️⃣ Instalar dependencias:
 
@@ -216,9 +270,9 @@ Repositorio público:
 https://github.com/JavieraLoy/cloudsync-vue-weather
 
 Rama actual:
-feature-auth-vuex
+feature-registro
 
 👩‍💻 Autor:
 
 Desarrollado por Javiera Loyola
-Proyecto enfocado en el aprendizaje de Vue 3, Vuex, vue router,  consumo de APIs y desarrollo frontend moderno, incorporando autenticación, manejo de estado global y buenas prácticas de arquitectura.
+Proyecto enfocado en el aprendizaje de Vue 3, Vuex, Vue router,  consumo de APIs, incorporando autenticación, manejo de estado global y buenas prácticas de arquitectura frontend.

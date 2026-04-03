@@ -6,6 +6,7 @@ import CityDetailView from '../views/CityDetailView.vue';
 import LoginView from '../views/LoginView.vue';
 import FavoritosView from '../views/FavoritosView.vue';
 import store from '../store/index';
+import RegisterView from '../views/RegisterView.vue';
 
 const routes = [
     {
@@ -32,7 +33,14 @@ const routes = [
     {
         path: '/login',
         name: 'login',
-        component: LoginView
+        component: LoginView,
+        meta: {guestOnly: true}
+    },
+    {
+        path: '/registro',
+        name: 'registro',
+        component: RegisterView,
+        meta: {guestOnly: true}
     },
     {
         path: '/favoritos',
@@ -40,6 +48,7 @@ const routes = [
         component: FavoritosView,
         meta: {requiresAuth: true}
     }
+    
 ];
 
 const router= createRouter({
@@ -51,6 +60,9 @@ router.beforeEach((to)=>{
     const user= store.state.user;
     if(to.meta.requiresAuth && !user){
         return {name: 'login'};
+    }
+    if(to.meta.guestOnly && user){
+        return {name: 'home'};
     }
     return true;
 });

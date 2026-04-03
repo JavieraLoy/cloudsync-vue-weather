@@ -34,13 +34,22 @@
               <button @click="toggleUnidad" class="btn btn-sm btn-light main-nav__btn">
                 °{{ unidad }}
               </button>
-              <span v-if="user" class="main-nav__user">Hola 👋, {{ user.name }}</span>           
-              <router-link v-if="!user" to="/login" class="btn btn-sm btn-outline-light main-nav__btn">
-                Login
-              </router-link>
-              <button v-else @click="logout" class="btn btn-sm btn-danger main-nav__btn">
-                Salir
-              </button>
+              <template v-if="!user">
+                <router-link to="/login" class="btn btn-sm btn-outline-light main-nav__btn">
+                  Login
+                </router-link>
+                <router-link to="/registro" class="btn btn-sm btn-outline-light main-nav__btn">
+                  Registrarse
+                </router-link>
+              </template>
+              <template v-else>
+                <span class="main-nav__user">
+                  Hola 👋, {{ user.name }}
+                </span>
+                <button @click="logout" class="btn btn-sm btn-danger main-nav__btn">
+                  Salir
+                </button>
+              </template>
             </div>
         </div>
     </div>
@@ -51,7 +60,7 @@
 import logo from '../assets/img/logo-cloudsync.png';
 import { useUnidad } from '../services/useUnidad';
 import {useStore} from 'vuex';
-import {computed} from 'vue';
+import {computed, onMounted} from 'vue';
 import {useRouter} from 'vue-router';
 
 const {unidad, toggleUnidad}= useUnidad();
@@ -64,6 +73,12 @@ const logout=()=>{
   localStorage.setItem("logoutMessage","Sesión cerrada correctamente");
   router.push("/login");
 };
+
+onMounted(()=>{
+  if(store.state.user && store.state.user.email){
+    store.dispatch("cargarFavoritos");
+  }
+});
 </script>
 
 <style scoped>
